@@ -14,4 +14,14 @@ class Merchant extends Model
     protected $fillable = ['CreateDate', 'Token', 'Nama', 'Alamat', 'Pic', 'PicTelp', 'Email', 'Pass', 'Kebutuhan', 'LastUpdate', 'Akif', 'Validasi'];
     const CREATED_AT = 'CreateDate';
     const UPDATED_AT = 'LastUpdate';
+
+    /**
+     * Get all of the events for the Merchant
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'IdMerchant', 'Id');
+    }
 }

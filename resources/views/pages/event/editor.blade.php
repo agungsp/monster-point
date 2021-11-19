@@ -239,7 +239,15 @@
                         <div class="mb-2 border rounded-xl" id="formulaTesterContainer">
                             <span class="d-block text-center py-3">Please Wait...</span>
                         </div>
-                        <div class="border rounded-xxl p-3"></div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="resultTest" class="border rounded-xxl p-3 d-flex justify-content-center">
+                                    <div id="loadingTest" class="spinner-border text-info" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary rounded-xxl" data-bs-dismiss="modal">
@@ -378,15 +386,12 @@
                     autoRefresh: true,
                     mode: 'text/monsterpoint',
                     readOnly: 'nocursor',
-                    // lineNumbers: true,
-                    // lineWrapping: true,
                 });
                 eventTester.setSize('100%', '10rem');
             });
 
             $('#modalFormulaTester').on('shown.bs.modal', function (e) {
                 eventTester.refresh();
-
                 $.ajax({
                     url: "{{ route('event-test', $event->Id) }}",
                     type: "POST",
@@ -394,14 +399,26 @@
                         event_id: {{ $event->Id }}
                     },
                     success: (res) => {
-
+                        new JsonViewer({
+                            container: document.querySelector('#resultTest'),
+                            data: JSON.stringify(res[0]),
+                            theme: 'light',
+                            expand: true
+                        });
+                        $('#loadingTest').addClass('d-none');
                     },
                     error: (error) => {
-
+                        $('#resultTest').html(`
+                            <span class="text-danger">${error.responseJSON.message}</span>
+                        `);
                     }
                 });
-
             });
+
+            $('#modalFormulaTester').on('hidden.bs.modal', function (e) {
+                $('#resultTest').html('');
+            });
+
         });
     </script>
 @endsection

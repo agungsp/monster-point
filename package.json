@@ -28,6 +28,7 @@
         "devextreme": "21.2.3",
         "jquery": "^3.6.0",
         "js-confetti": "^0.9.0",
+        "json-viewer-js": "^1.0.7",
         "mqtt": "^4.2.8",
         "select2": "^4.1.0-rc.0",
         "sweetalert2": "^11.1.9"

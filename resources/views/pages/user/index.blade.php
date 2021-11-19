@@ -30,7 +30,7 @@
         @method('put')
         <div class="row">
             <div class="col-md-6 mb-3">
-                <div class="card rounded-xxl card-profile">
+                <div class="card rounded-xxl card-auto-resize">
                     <div class="card-body">
                         <h4 class="mb-5">Merchant Info</h4>
 
@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="col-md-6 mb-3">
-                <div class="card rounded-xxl card-profile">
+                <div class="card rounded-xxl card-auto-resize">
                     <div class="card-body">
                         <h4 class="mb-5">Credentials</h4>
 
@@ -246,20 +246,8 @@
                 showPasswordBtn.html('<i class="fas fa-eye"></i>');
             }
         }
-        function resizeCards() {
-            let cards = document.querySelectorAll('.card-profile');
-            let heights = [];
-            cards.forEach(card => {
-                heights.push($(card).height());
-            });
-            let maxHeight = Math.max(...heights);
-            cards.forEach(card => {
-                $(card).css({height: `${maxHeight}px`});
-            });
-        }
 
         $(document).ready(() => {
-            resizeCards();
             $('#btnCopyToken').on('click', function () {
                 if (copyToClipboard(document.getElementById("token"))) {
                     Toast.fire({

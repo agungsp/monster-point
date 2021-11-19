@@ -23,3 +23,4 @@ require('cleave.js');
 require('cleave.js/dist/addons/cleave-phone.id.js');
 
 window.JSConfetti = require('js-confetti/dist/js-confetti.min.js');
+window.JsonViewer = require('json-viewer-js');

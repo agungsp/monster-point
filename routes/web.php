@@ -27,9 +27,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard.index');
 
     Route::resource('profile', Web\UserControler::class);
-    Route::resource('events', Web\EventController::class);
     Route::resource('merchants', Web\MerchantController::class);
     Route::resource('members', Web\MemberController::class);
+
+    Route::resource('events', Web\EventController::class);
+    Route::post('event-test/{event}', [Web\EventController::class, 'eventTest'])->name('event-test');
+
 
     Route::post('popup-verify/{user}', function (User $user) {
         $user->isShowPopupVerify = true;
