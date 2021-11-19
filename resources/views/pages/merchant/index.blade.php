@@ -35,10 +35,10 @@
                 <div class="card-body position-relative" style="min-height: calc(100vh - 10.3rem);">
                     <div class="row justify-content-between mb-3">
                         <div class="col-auto fw-bold">
-                            PT. Something Big <i class="fas fa-pencil-alt ms-3"></i>
+                            <span id="merchant-name">No Name</span> <i class="fas fa-pencil-alt ms-3"></i>
                         </div>
                         <div class="col-auto">
-                            5 <i class="fas fa-user ms-1"></i>
+                            <span id="total-member">0</span> <i class="fas fa-user ms-1"></i>
                         </div>
                     </div>
 
@@ -82,6 +82,7 @@
         let submitted = false;
         let merchantTable = null;
         let memberTable = null;
+        let memberCount = null;
 
         $.ajaxSetup({
             headers: {
@@ -145,10 +146,11 @@
                 $(this).find('#member_key').focus();
             });
 
+            getMembers();
             // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Get Data Merchant >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             merchantTable = $('#merchantTable').dxDataGrid({
                 dataSource: `{{ route('merchants.index') }}`,
-                keyExpr: 'Id',
+                // keyExpr: 'Id',
                 columnAutoWidth: true,
                 hoverStateEnabled: true,
                 selection: {
@@ -198,47 +200,66 @@
                 showColumnLines: false,
                 showRowLines: true,
                 activeStateEnabled: true,
+                onSelectionChanged(selectedItems) {
+                    const data = selectedItems.selectedRowsData[0];
+                    if (data) {
+                        let merchantId = data.Id;
+                        document.getElementById('merchant-name').innerText = data.Nama;
+                        getMembers(merchantId);
+                    }
+                },
             }).dxDataGrid('instance');
             // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Get Data Merchant >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
             // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Get Data Member >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            memberTable = $('#memberTable').dxDataGrid({
-                dataSource: `{{ route('members.index') }}`,
-                keyExpr: 'Id',
-                columnAutoWidth: true,
-                hoverStateEnabled: true,
-                columns: [
-                    {
-                        caption: '#',
-                        cellTemplate: function(container, options) {
-                            container.html(`${options.row.rowIndex + 1}`);
+
+            function getMembers(id = ''){
+                memberTable = $('#memberTable').dxDataGrid({
+                    // dataSource: `{{ route('members.index') }}`,
+                    dataSource: `{{ url('members/getMembers') }}?id=${id}`,
+                    data: {IdMerhant: id},
+                    // keyExpr: 'Id',
+                    columnAutoWidth: true,
+                    hoverStateEnabled: true,
+                    columns: [
+                        {
+                            caption: '#',
+                            cellTemplate: function(container, options) {
+                                container.html(`${options.row.rowIndex + 1}`);
+                            }
+                        },
+                        {
+                            dataField: 'Nama',
+                        },
+                        {
+                            dataField: 'Point',
+                        },
+                        {
+                            dataField: 'Id',
+                            caption: '',
+                            cellTemplate: function (container, options) {
+                                container.html(`
+                                    <button class="btn btn-primary btn-sm rounded-xxl" data-id="${options.value}" id="editMember">
+                                        <i class="fas fa-edit fa-sm"></i>
+                                    </button>
+                                    <button onclick="deleteData(${options.value});" class="btn btn-danger btn-sm rounded-xxl" id="deleteMember">
+                                        <i class="fas fa-trash-alt fa-sm"></i>
+                                    </button>
+                                `);
+                            }
                         }
-                    },
-                    {
-                        dataField: 'Nama',
-                    },
-                    {
-                        dataField: 'Point',
-                    },
-                    {
-                        dataField: 'Id',
-                        caption: '',
-                        cellTemplate: function (container, options) {
-                            container.html(`
-                                <button class="btn btn-primary btn-sm rounded-xxl" data-id="${options.value}" id="editMember">
-                                    <i class="fas fa-edit fa-sm"></i>
-                                </button>
-                                <button onclick="deleteData(${options.value});" class="btn btn-danger btn-sm rounded-xxl" id="deleteMember">
-                                    <i class="fas fa-trash-alt fa-sm"></i>
-                                </button>
-                            `);
-                        }
-                    }
-                ],
-                showBorders: false,
-                showColumnLines: false,
-                showRowLines: true,
-            }).dxDataGrid('instance');
+                    ],
+                    showBorders: false,
+                    showColumnLines: false,
+                    showRowLines: true,
+                }).dxDataGrid('instance');
+
+                // =========== Get Total Member ==========
+                var countMembers = memberTable.getDataSource().load().done(function (data) {
+                    document.getElementById('total-member').innerText = data.length;
+                })
+            }
+
             // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Get Data Member >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
             // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Call modal Create Data >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

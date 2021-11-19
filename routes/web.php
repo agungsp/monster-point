@@ -28,6 +28,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('profile', Web\UserControler::class);
     Route::resource('merchants', Web\MerchantController::class);
+
+    Route::get('members/getMembers', [Web\MemberController::class, 'getMembers'])->name('members.getMembers');
     Route::resource('members', Web\MemberController::class);
 
     Route::resource('events', Web\EventController::class);

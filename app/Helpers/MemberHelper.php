@@ -73,4 +73,11 @@ class MemberHelper {
         Member::where('id', $member->Id)->delete();
         return response(['message' => 'The member has been deleted']);
     }
+
+    public static function getMembers(Request $request)
+    {
+        $members = Member::where('IdMerhant', $request->id)->orderBy('id', 'DESC')->get();
+        return response()->json($members);
+    }
+
 }

@@ -84,4 +84,9 @@ class MemberController extends Controller
     {
         return MemberHelper::destroyMember($member);
     }
+
+    public function getMembers(Request $request)
+    {
+        return MemberHelper::getMembers($request);
+    }
 }
