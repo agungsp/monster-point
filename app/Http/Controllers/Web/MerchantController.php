@@ -124,12 +124,22 @@ class MerchantController extends Controller
                 'Email' => $request->merchant_pic_email,
                 'Kebutuhan' => $request->use_for,
             ]);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            return response(['msg' => 'The Merchant has been updated']);
+=======
+>>>>>>> 712f922688c64f5839c97882e3ed5da374141170
         }
 
         if ($query) {
             return response()->json(['code' => 1, 'msg' => 'Merchant Has Been Updated']);
         } else {
             return response()->json(['code' => 0, 'msg' => 'Something went wrong']);
+<<<<<<< HEAD
+=======
+>>>>>>> 3fb7533f219b3e192ee25b2aa50e33454e9c7bbf
+>>>>>>> 712f922688c64f5839c97882e3ed5da374141170
         }
     }
 
@@ -141,11 +151,22 @@ class MerchantController extends Controller
      */
     public function destroy(Merchant $merchant)
     {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        Merchant::where('id', $merchant->Id)->delete();
+        return response(['message' => 'The merchant has been deleted']);
+=======
+>>>>>>> 712f922688c64f5839c97882e3ed5da374141170
         $query = $merchant->delete();
         if ($query) {
             return response()->json(['code' => 1, 'msg' => 'Merchant Has Been Deleted From Databases']);
         } else {
             return response()->json(['code' => 0, 'msg' => 'Something went wrong']);
         }
+<<<<<<< HEAD
+=======
+>>>>>>> 3fb7533f219b3e192ee25b2aa50e33454e9c7bbf
+>>>>>>> 712f922688c64f5839c97882e3ed5da374141170
     }
 }
